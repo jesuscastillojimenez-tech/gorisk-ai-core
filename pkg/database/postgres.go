@@ -1,5 +1,4 @@
 package database
-package database
 
 import (
 	"fmt"
@@ -11,10 +10,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// DB guarda la instancia global de la conexión a la base de datos
+// DB holds the global database connection pool instance
 var DB *gorm.DB
 
-// ConnectDatabase inicializa la conexión con PostgreSQL y ejecuta las migraciones automáticas
+// ConnectDatabase initializes the PostgreSQL connection and runs automatic migrations
 func ConnectDatabase() *gorm.DB {
 	host := getEnv("DB_HOST", "localhost")
 	user := getEnv("DB_USER", "postgres")
@@ -23,30 +22,30 @@ func ConnectDatabase() *gorm.DB {
 	port := getEnv("DB_PORT", "5432")
 	sslmode := getEnv("DB_SSLMODE", "disable")
 
-	// DSN: Texto formateado con la información necesaria para conectarse
+	// DSN: Data Source Name formatting
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		host, user, password, dbname, port, sslmode)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Error al conectar a la base de datos PostgreSQL: %v", err)
+		log.Fatalf("Failed to connect to PostgreSQL database: %v", err)
 	}
 
-	log.Println("Conexión con PostgreSQL establecida con éxito.")
+	log.Println("PostgreSQL connection successfully established.")
 
-	// Crea o actualiza automáticamente la tabla CreditApplication
+	// Automatically migrate the CreditApplication schema
 	err = db.AutoMigrate(&models.CreditApplication{})
 	if err != nil {
-		log.Fatalf("Error al migrar la tabla en la base de datos: %v", err)
+		log.Fatalf("Failed to auto-migrate database models: %v", err)
 	}
 
-	log.Println("Migración de la base de datos completada con éxito.")
+	log.Println("Database migration completed successfully.")
 
 	DB = db
 	return db
 }
 
-// getEnv busca variables de entorno y si no existen, usa un valor por defecto
+// getEnv retrieves environment variables with a default fallback mechanism
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value

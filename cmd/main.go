@@ -1,21 +1,33 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/jesuscastillojimenez-tech/gorisk-ai-core/pkg/database"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Inicializa el motor de Gin (tu servidor web)
+	// 1. Carga las variables del archivo .env a la memoria del sistema
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Aviso: No se encontró el archivo .env, usando variables del sistema")
+	}
+
+	// 2. Conecta con PostgreSQL en Neon y ejecuta las migraciones automáticas
+	database.ConnectDatabase()
+
+	// 3. Inicializa el servidor web Gin
 	r := gin.Default()
 
-	// Crea un endpoint de prueba
+	// 4. Endpoint de comprobación básica del servidor
 	r.GET("/health", func(c *gin.Context) {
-		// Devuelve una respuesta en formato JSON
 		c.JSON(200, gin.H{
 			"status": "UP",
 		})
 	})
 
-	// Enciende el servidor en el puerto 8080
+	// 5. Arranca el servidor escuchando en el puerto 8080
 	r.Run(":8080")
 }
