@@ -1,0 +1,23 @@
+# Environment variables and secrets (CRITICAL)
+.env
+*.env
+.env.local
+
+# Go binaries and build output
+main
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+gorisk-ai-core
+
+# Node.js / React dependencies and builds
+node_modules/
+frontend-dashboard/node_modules/
+frontend-dashboard/dist/
+frontend-dashboard/.vite/
+
+# OS metadata
+.DS_Store
+Thumbs.db
