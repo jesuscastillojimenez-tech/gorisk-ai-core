@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gorisk-api-deployment
+  labels:
+    app: gorisk-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gorisk-api
+  template:
+    metadata:
+      labels:
+        app: gorisk-api
+    spec:
+      containers:
+      - name: gorisk-api
+        image: tu-usuario-dockerhub/gorisk-api:latest # Placeholder para ECR/DockerHub
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_HOST
+          value: "postgres-service"
+        # En AWS, los secretos (como GEMINI_API_KEY) se inyectan mediante AWS Secrets Manager o k8s Secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gorisk-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: gorisk-api
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

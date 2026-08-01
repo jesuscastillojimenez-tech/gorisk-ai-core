@@ -4,20 +4,16 @@
 .env.local
 
 # Go binaries and build output
+gorisk-api
 main
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
-gorisk-ai-core
 
-# Node.js / React dependencies and builds
-node_modules/
-frontend-dashboard/node_modules/
-frontend-dashboard/dist/
-frontend-dashboard/.vite/
-
-# OS metadata
+# IDE and OS metadata
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
